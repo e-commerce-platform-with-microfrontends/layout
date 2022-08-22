@@ -58,11 +58,11 @@ export default () => {
           <a href="http://localhost:3000/products/">
             <Heading4>CBP Marketplace</Heading4>
           </a>
-          <S.CartLink href="http://localhost:3000/cart/">
+          <S.CartLink id="go-to-cart" href="http://localhost:3000/cart/">
             Cart
             {
               itemsInCart.length > 0 &&
-              <S.CartCount>{itemsInCart.length}</S.CartCount>
+              <S.CartCount id="cart-count">{itemsInCart.length}</S.CartCount>
             }
           </S.CartLink>
         </S.Content>
