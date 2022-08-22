@@ -4,21 +4,43 @@ import { Heading4 } from 'ui-components';
 import * as S from './Header.styles';
 
 export default () => {
-  const [productsInCart, setProductsInCart] = useState(JSON.parse(localStorage.getItem('products')) || []);
+  const [itemsInCart, setItemsInCart] = useState([]);
 
-  const addToCartEventlistener = ({ detail }) => {
-    const currentProductsInCart = JSON.parse(localStorage.getItem('products')) || [];
-    const updatedProductsInCart = [...currentProductsInCart, detail.productId];
-    setProductsInCart(updatedProductsInCart);
-    localStorage.setItem('products', JSON.stringify(updatedProductsInCart));
+  const addToCartEventlistener = async ({ detail }) => {
+    const newItemInCart = { item: { id: detail.itemId, price: detail.price } };
+
+    try {
+      const itemAdded = await fetch(`http://localhost:4000/cart/1/items`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newItemInCart)
+      }).then(res => res.json());
+
+      setItemsInCart((itemsInCart) => [...itemsInCart, itemAdded]);
+    } catch (e) {
+      alert('something went wrong')
+    }
   };
 
-  const removeFromCartEventlistener = ({ detail }) => {
-    const currentProductsInCart = JSON.parse(localStorage.getItem('products')) || [];
-    const updatedProductsInCart = currentProductsInCart.filter(p => p !== detail.productId);
-    setProductsInCart(updatedProductsInCart);
-    localStorage.setItem('products', JSON.stringify(updatedProductsInCart));
+  const removeFromCartEventlistener = async ({ detail }) => {
+    try {
+      await fetch(`http://localhost:4000/items/${detail.itemId}`, {
+        method: 'DELETE',
+      }).then(res => res.json());
+
+      setItemsInCart((itemsInCart) => itemsInCart.filter(item => item.id !== detail.itemId));
+    } catch (e) {
+      alert('something went wrong')
+    }
   };
+
+  useEffect(async () => {
+    const itemsInCart = await fetch(`http://localhost:4000/cart/1/items`).then(res => res.json());
+
+    setItemsInCart(itemsInCart);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('ADD_TO_CART', addToCartEventlistener)
@@ -39,8 +61,8 @@ export default () => {
           <S.CartLink href="http://localhost:3000/cart/">
             Cart
             {
-              productsInCart.length > 0 &&
-              <S.CartCount>{productsInCart.length}</S.CartCount>
+              itemsInCart.length > 0 &&
+              <S.CartCount>{itemsInCart.length}</S.CartCount>
             }
           </S.CartLink>
         </S.Content>
