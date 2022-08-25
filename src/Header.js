@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-
 import { Heading4 } from 'ui-components';
+
+import { API_ROOT } from './env';
 import * as S from './Header.styles';
 
 export default () => {
@@ -10,7 +11,7 @@ export default () => {
     const newItemInCart = { item: { id: detail.itemId, price: detail.price } };
 
     try {
-      const itemAdded = await fetch(`http://localhost:4000/cart/1/items`, {
+      const itemAdded = await fetch(`${API_ROOT.DEV}/cart/1/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -26,7 +27,7 @@ export default () => {
 
   const removeFromCartEventlistener = async ({ detail }) => {
     try {
-      await fetch(`http://localhost:4000/items/${detail.itemId}`, {
+      await fetch(`${API_ROOT.DEV}/items/${detail.itemId}`, {
         method: 'DELETE',
       }).then(res => res.json());
 
@@ -37,7 +38,7 @@ export default () => {
   };
 
   useEffect(async () => {
-    const itemsInCart = await fetch(`http://localhost:4000/cart/1/items`).then(res => res.json());
+    const itemsInCart = await fetch(`${API_ROOT.DEV}/cart/1/items`).then(res => res.json());
 
     setItemsInCart(itemsInCart);
   }, []);
