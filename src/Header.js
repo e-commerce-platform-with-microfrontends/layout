@@ -16,7 +16,7 @@ export default () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
+          'auth-token': JSON.parse(localStorage.getItem('authToken')),
         },
         body: JSON.stringify(newItemInCart)
       }).then(res => res.json());
@@ -32,7 +32,7 @@ export default () => {
       await fetch(`${API_ROOT.DEV}/items/${detail.itemId}`, {
         method: 'DELETE',
         headers: {
-          'auth-token': localStorage.getItem('authToken'),
+          'auth-token': JSON.parse(localStorage.getItem('authToken')),
         }
       }).then(res => res.json());
 
@@ -78,7 +78,7 @@ export default () => {
           </a>
           {
             isLoggedIn ?
-              <>
+              <div>
                 <S.CartLink id="go-to-cart" href="http://localhost:3000/cart/">
                   Cart
                   {
@@ -87,7 +87,7 @@ export default () => {
                   }
                 </S.CartLink>
                 <span id="Logout" onClick={logout}>Logout</span>
-              </>
+              </div>
               :
               <a id="go-to-login" href="http://localhost:3000/login/">Login</a>
           }

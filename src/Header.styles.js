@@ -20,6 +20,7 @@ export const Content = styled.div`
 
 export const CartLink = styled.a`
   position: relative;
+  padding-right: ${({ theme }) => `${theme.gridSize * 2}px`};
 `
 
 export const CartCount = styled.i`
