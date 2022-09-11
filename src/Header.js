@@ -6,7 +6,7 @@ import * as S from './Header.styles';
 
 export default () => {
   const [itemsInCart, setItemsInCart] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
+  const [isLoggedIn, setIsLoggedIn] = useState(JSON.parse(localStorage.getItem('isLoggedIn')) || false);
 
   const addToCartEventlistener = async ({ detail }) => {
     const newItemInCart = { item: { id: detail.itemId, price: detail.price } };
