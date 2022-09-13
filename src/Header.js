@@ -10,13 +10,12 @@ export default () => {
 
   const addToCartEventlistener = async ({ detail }) => {
     const newItemInCart = { item: { id: detail.itemId, price: detail.price } };
-
     try {
       const itemAdded = await fetch(`${API_ROOT.DEV}/cart/1/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'auth-token': JSON.parse(localStorage.getItem('authToken')),
+          'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify(newItemInCart)
       }).then(res => res.json());
@@ -32,7 +31,7 @@ export default () => {
       await fetch(`${API_ROOT.DEV}/items/${detail.itemId}`, {
         method: 'DELETE',
         headers: {
-          'auth-token': JSON.parse(localStorage.getItem('authToken')),
+          'auth-token': localStorage.getItem('authToken'),
         }
       }).then(res => res.json());
 
